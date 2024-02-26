@@ -39,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
-    @Override
-    protected void onResume() { // register listener to an "active" status when the app is in use
+    //@Override
+    /*protected void onResume() { // register listener to an "active" status when the app is in use
         super.onResume();
-        sensorManager.registerListener((SensorEventListener) this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-    }
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME); // NOT WORKING, CAN'T CAST TYPE THIS TO SENSOREVENTLISTENER
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+    }*/
 
     @Override
     protected void onPause() { // pause listeners when the app is not in use
