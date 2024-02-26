@@ -8,9 +8,9 @@
 
     <ImageView
         android:id="@+id/compass"
-        android:layout_width="150dp"
-        android:layout_height="147dp"
-        app:srcCompat="@android:drawable/ic_menu_compass"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="292dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/compass"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
