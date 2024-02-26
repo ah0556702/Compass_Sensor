@@ -11,6 +11,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean lastMagnetometerSet = false;
     private float[] rotationMatrix = new float[9];
     private float[] orientation = new float[3];
+    private float currentDegree = 0f;
 
 
     @Override
@@ -53,29 +56,54 @@ public class MainActivity extends AppCompatActivity {
         sensorManager.unregisterListener((SensorEventListener) this, accelerometer);
     }
 
+//    public void onSensorChanged(SensorEvent event) {
+//        if (event.sensor == magnetometer) {
+//            System.arraycopy(event.values, 0, lastMagnetometer, 0, event.values.length);
+//            lastMagnetometerSet = true;
+//        } else if (event.sensor == accelerometer) {
+//            System.arraycopy(event.values, 0, lastAccelerometer, 0, event.values.length);
+//            lastAccelerometerSet = true;
+//        }
+//
+//        if (lastAccelerometerSet && lastMagnetometerSet) {
+//            SensorManager.getRotationMatrix(rotationMatrix, null, lastAccelerometer, lastMagnetometer);
+//            SensorManager.getOrientation(rotationMatrix, orientation);
+//
+//            float azimuthInRadians = orientation[0];
+//            float azimuthInDegrees = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
+//
+//            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_compass);
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(-azimuthInDegrees);
+//            Bitmap rotatedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, true);
+//
+//            compassImg.setImageBitmap(rotatedBitmap);
+//        }
+//    }
+
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor == magnetometer) {
-            System.arraycopy(event.values, 0, lastMagnetometer, 0, event.values.length);
-            lastMagnetometerSet = true;
-        } else if (event.sensor == accelerometer) {
-            System.arraycopy(event.values, 0, lastAccelerometer, 0, event.values.length);
-            lastAccelerometerSet = true;
-        }
 
-        if (lastAccelerometerSet && lastMagnetometerSet) {
-            SensorManager.getRotationMatrix(rotationMatrix, null, lastAccelerometer, lastMagnetometer);
-            SensorManager.getOrientation(rotationMatrix, orientation);
+        // get the angle around the z-axis rotated
+        float degree = Math.round(event.values[0]);
 
-            float azimuthInRadians = orientation[0];
-            float azimuthInDegrees = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
+        // create a rotation animation (reverse turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                currentDegree,
+                -degree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
 
-            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_compass);
-            Matrix matrix = new Matrix();
-            matrix.postRotate(-azimuthInDegrees);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, true);
+        // how long the animation will take place
+        ra.setDuration(210);
 
-            compassImg.setImageBitmap(rotatedBitmap);
-        }
+        // set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        compassImg.startAnimation(ra);
+        currentDegree = -degree;
+
     }
 }
 
